@@ -16,15 +16,12 @@
 
 package com.example.messagingrabbitmq;
 
-import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.Test;
-
 import org.springframework.amqp.AmqpConnectException;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.google.gson.JsonObject;
 
 @SpringBootTest
 public class MessagingRabbitmqApplicationTest {
@@ -32,18 +29,16 @@ public class MessagingRabbitmqApplicationTest {
 	@MockBean
 	private Runner runner;
 
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
-
-	@Autowired
-	private Receiver receiver;
-
 	@Test
 	public void test() throws Exception {
 		try {
-			rabbitTemplate.convertAndSend(MessagingRabbitmqApplication.queueName,
-					"Hello from RabbitMQ!");
-			receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
+			JsonObject objeto = new JsonObject();
+			objeto.addProperty("dns", "teste.com");
+			objeto.addProperty("ip", "1.1.1.1");
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("mensagem", "Hello from RabbitMQ");
+			jsonObject.add("objeto", objeto);
+			runner.sendMessage(jsonObject.toString());
 		}
 		catch (AmqpConnectException e) {
 			// ignore - rabbit is not running

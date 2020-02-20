@@ -15,7 +15,7 @@ public class Receiver {
 	public void receiveMessage(String message) {
 		JsonObject json = new Gson().fromJson(message, JsonObject.class);
 		DnsServicesConfiguration dns = new Gson().fromJson(json.get("objeto"), DnsServicesConfiguration.class);
-		if(json.get("acao").getAsString().equals("salvar")) {
+		if(json.get("acao") != null && json.get("acao").getAsString().equals("salvar")) {
 			Utils.save(dns);
 		}
 		System.out.println("Received <" + dns.toString() + ">");
