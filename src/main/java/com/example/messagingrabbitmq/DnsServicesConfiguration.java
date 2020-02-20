@@ -57,6 +57,10 @@ public class DnsServicesConfiguration {
 		return true;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "DnsServicesConfiguration [dns=" + dns + ", ip=" + ip + "]";
+	}
+
 	
 }
