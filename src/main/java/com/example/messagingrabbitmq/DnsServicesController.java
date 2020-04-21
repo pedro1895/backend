@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.messagingrabbitmq.repository.CustomerRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -20,6 +21,9 @@ public class DnsServicesController {
 	@Autowired
 	private Runner runner;
 	
+	@Autowired
+	private Utils utils;
+	
 	@GetMapping("/dns-services")
 	public DnsServicesConfiguration getDnsServicesConfiguration() {
 		return new DnsServicesConfiguration("globo.com","186.192.90.5");
@@ -27,7 +31,7 @@ public class DnsServicesController {
 	
 	@GetMapping("/dns-services/list")
 	public List<DnsServicesConfiguration> listDnsServicesConfiguration() {
-		 return Utils.listAll();
+		 return utils.listAll();
 	}
 	
 	@PostMapping("/dns-services")
