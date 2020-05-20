@@ -1,4 +1,4 @@
-package com.example.messagingrabbitmq;
+package com.adanalivmel.application.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -10,14 +10,20 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.rabbitmq.client.ConnectionFactory;
+import com.adanalivmel.application.queue.Receiver;
 
 @SpringBootApplication
-public class MessagingRabbitmqApplication {
+@EntityScan(basePackages = "com.adanalivmel.application.model")
+@ComponentScan("com.adanalivmel.application.*")
+@EnableMongoRepositories(basePackages = "com.adanalivmel.application.repository")
+public class Application {
 
 	static final String topicExchangeName = "spring-boot-exchange";
 
@@ -40,7 +46,7 @@ public class MessagingRabbitmqApplication {
 
 	@Bean
 	CachingConnectionFactory myConnectionFactory() {
-		return new CachingConnectionFactory("fila", 5672);
+		return new CachingConnectionFactory("rabbitmq", 5672);
 	}
 	
 	@Bean
@@ -62,14 +68,13 @@ public class MessagingRabbitmqApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/dns-services").allowedOrigins("*");
-				registry.addMapping("/dns-services/list").allowedOrigins("*");
+			       registry.addMapping("/customer/**").allowedOrigins(new String[]{"*"});
 			}
 		};
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		SpringApplication.run(MessagingRabbitmqApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }
