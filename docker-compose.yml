@@ -1,5 +1,55 @@
-rabbitmq:
-  image: rabbitmq:management
-  ports:
-    - "5672:5672"
-    - "15672:15672"
+version: "3.4"
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: pedro1895/rabbitmq
+    restart: always
+    expose:
+      - "5672"
+      - "15672"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - network
+
+  mongodb:
+    container_name: mongodb
+    image: pedro1895/mongo-enterprise:4.0
+    restart: always
+    expose:
+      - "27017"
+    ports:
+      - 27017:27017
+    networks:
+      - network
+
+  frontapp:
+    container_name: frontapp
+    image: pedro1895/dockerize-vuejs-app
+    restart: always
+    expose:
+      - "80"
+    ports:
+      - 80:80
+    networks:
+      - network
+
+  aplicattion:
+    container_name: application
+    image: pedro1895/application:0.0.1-SNAPSHOT
+    restart: always
+    expose:
+      - "9090"
+    ports:
+      - 9090:9090
+    depends_on:
+      - "mongodb"
+      - "rabbitmq"
+    networks:
+      - network
+
+  
+networks:
+  network:
+   driver: bridge

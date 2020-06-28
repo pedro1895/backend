@@ -46,7 +46,7 @@ public class Application {
 
 	@Bean
 	CachingConnectionFactory myConnectionFactory() {
-		return new CachingConnectionFactory("rabbitmq", 5672);
+		return new CachingConnectionFactory("localhost", 5672);
 	}
 	
 	@Bean
