@@ -11,6 +11,8 @@ import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -23,6 +25,8 @@ import com.adanalivmel.application.queue.Receiver;
 @EntityScan(basePackages = "com.adanalivmel.application.model")
 @ComponentScan("com.adanalivmel.application.*")
 @EnableMongoRepositories(basePackages = "com.adanalivmel.application.repository")
+@EnableFeignClients("com.adanalivmel.application.controller")
+@EnableDiscoveryClient
 public class Application {
 
 	static final String topicExchangeName = "spring-boot-exchange";
@@ -46,7 +50,7 @@ public class Application {
 
 	@Bean
 	CachingConnectionFactory myConnectionFactory() {
-		return new CachingConnectionFactory("localhost", 5672);
+		return new CachingConnectionFactory("192.168.0.213", 5672);
 	}
 	
 	@Bean

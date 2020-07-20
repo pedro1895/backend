@@ -27,6 +27,9 @@ public class CustomerController {
     
     @Autowired
     private HandlingCustomer handlingCustomer;
+    
+	@Autowired
+	private ServiceProxy proxy;
 
     @GetMapping(value={"/customer/{id}"})
     public Customer getCustomer(@PathVariable String id) {
@@ -34,8 +37,8 @@ public class CustomerController {
     }
 
     @GetMapping(value={"/customer"})
-    public List<Customer> listDnsServicesConfiguration() {
-        return this.handlingCustomer.findAll();
+    public List<Customer> list() {
+        return proxy.list();
     }
 
     @PutMapping(value={"/customer"})
